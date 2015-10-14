@@ -1,4 +1,3 @@
-
 #include "SevSeg.h"
 
 #define d1 13
@@ -16,6 +15,9 @@
 #define HOUR_BUTTON 2
 #define MINUTE_BUTTON 3
 #define TICK_LENGTH 250
+
+
+/*************************************/
 
 SevSeg sevseg;
 
@@ -41,7 +43,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   checkTick();
-  sevseg.setNumber(hour * 100 + minute, 3);
+  sevseg.setNumber(hour * 100 + minute, 2);
   sevseg.refreshDisplay(); 
 }
 
@@ -60,11 +62,16 @@ void checkTick() {
 
 void tick() {
   Serial.println("TICK!");
-  ticks = ticks + 1;
+  ticks = ticks + 1; 
+  if (ticks > 239) {
+    ticks = 0;
+    minuteUp();
+  }
   readHourButton();
   readMinuteButton();
 }
 
+  
 void readHourButton() {
   if (digitalRead(HOUR_BUTTON) == HIGH) {
     hourUp();
@@ -92,7 +99,7 @@ void minuteUp() {
   minute = minute + 1;
   if (minute > 59) {
     minute = 0;
-    hourUp;
+    hourUp();
   }
 }
 
